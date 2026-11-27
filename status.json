@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T07:47:30+09:00",
+  "updatedAt": "2026-11-28T08:05:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -362,11 +362,11 @@
   },
   "liveTasks": [
     {
-      "id": "novend-2249-bori",
+      "id": "notion-restore-bori",
       "assignee": "bori",
-      "title": "비서실정리함 보물함 추가 완료",
+      "title": "노션 비서실 정리함 복원 완료",
       "status": "done",
-      "updatedAt": "2026-11-28T06:12:00+09:00"
+      "updatedAt": "2026-11-28T08:05:00+09:00"
     },
     {
       "id": "priv-7-mango",
