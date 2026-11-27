@@ -138,6 +138,52 @@
   .usage-badge.hot .dot{background:#d94f22;animation:pulseDot 1.8s ease-in-out infinite;}
   @keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
   .usage-badge{transition:background .2s, border-color .2s, color .2s;}
+
+  /* 말풍선: 작업중 / 완료 (보리·망고·체리) */
+  .bubble{
+    position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-100%);
+    display:inline-flex;align-items:center;gap:3px;white-space:nowrap;pointer-events:none;
+    font-family:inherit;font-size:10.2px;font-weight:800;letter-spacing:-.03em;line-height:1;z-index:4;
+    padding:5px 9px 5px 8px;border-radius:11px;color:#5c4028;
+    background:linear-gradient(180deg,#fffdf7,#fff5e4);
+    border:1px solid #dfc39a;
+    box-shadow:0 3px 9px rgba(110,70,30,.24), inset 0 1px 0 #fff;
+    transform-origin:50% 115%;
+  }
+  .bubble:after{
+    content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;
+    transform:translateX(-50%) rotate(45deg);background:#fff5e4;
+    border-right:1px solid #dfc39a;border-bottom:1px solid #dfc39a;border-bottom-right-radius:2px;
+  }
+  .bubble .em{font-size:10.5px;line-height:1;}
+  .bubble .bt{display:inline-block;}
+  .bubble.work{color:#8a5514;background:linear-gradient(180deg,#fffdf6,#fff0d4);border-color:#e6c386;}
+  .bubble.work:after{background:#fff0d4;border-color:#e6c386;}
+  .bubble.done{color:#3f6b45;background:linear-gradient(180deg,#fcfff8,#edf7e6);border-color:#c6ddb9;}
+  .bubble.done:after{background:#edf7e6;border-color:#c6ddb9;}
+  /* 자리: 보리는 사용한도 배지 위, 망고·체리는 자기 핀(머리) 바로 위 */
+  .bubble[data-who="bori"]{top:calc(var(--y) - 46px);}
+  .bubble[data-who="mango"],.bubble[data-who="cherry"]{top:calc(var(--y) - 20px);}
+  body.motion .bubble{animation:bubbleFloat 3.6s ease-in-out infinite;}
+  body.motion .bubble .bt{animation:bubbleSway 2.9s ease-in-out infinite;}
+  body.motion .bubble[data-who="mango"]{animation-delay:-1.2s}
+  body.motion .bubble[data-who="cherry"]{animation-delay:-2.3s}
+  body.motion .bubble[data-who="mango"] .bt{animation-delay:-.7s}
+  body.motion .bubble[data-who="cherry"] .bt{animation-delay:-1.4s}
+  @keyframes bubbleFloat{
+    0%,100%{transform:translate(-50%,-100%) translate(0,0) rotate(-2.2deg);}
+    28%{transform:translate(-50%,-100%) translate(1.6px,-3.2px) rotate(1.4deg);}
+    52%{transform:translate(-50%,-100%) translate(.4px,-5px) rotate(2.2deg);}
+    76%{transform:translate(-50%,-100%) translate(-1.6px,-2.4px) rotate(-.8deg);}
+  }
+  @keyframes bubbleSway{
+    0%,100%{transform:translateX(0) rotate(0);}
+    24%{transform:translateX(1.2px) rotate(-1.8deg);}
+    58%{transform:translateX(-1.2px) rotate(1.6deg);}
+    82%{transform:translateX(.6px) rotate(-.5deg);}
+  }
+  @media (prefers-reduced-motion: reduce){ body.motion .bubble, body.motion .bubble .bt{animation:none !important} }
+
   /* sheet: 오늘 사용한도 */
   .usage-box{margin:2px 0 4px;background:#fdf7ec;border:1px solid #f0e0c6;border-radius:14px;padding:11px 12px 10px;}
   .usage-box .utop{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
@@ -980,6 +1026,8 @@
 
       /* 보리 핀 위 사용한도 배지 (0%여도 항상 표시) */
       renderUsageBadge();
+      /* 보리·망고·체리 머리 위 말풍선 */
+      renderBubbles(true);
     }
 
     var chip = $("#chipRooms");
@@ -1003,6 +1051,85 @@
     map.insertAdjacentHTML("beforeend",
       '<span class="usage-badge ' + usageLevel(u.pct) + '" style="--x:' + x + '%;--y:' + y + '%" aria-label="보리 오늘 사용한도 ' + esc(usageText(u)) + '">' +
       '<i class="dot"></i>' + esc(usageText(u)) + '</span>');
+  }
+
+  /* ---------- render: 말풍선 (작업중 / 완료) ---------- */
+  /* liveTasks가 기준: working이면 '작업중...', done이면 완료 직후 몇 분간 '완료!' */
+  var BUBBLE_WINDOW_MS = 8 * 60 * 1000;          /* 완료 말풍선은 완료 후 8분 */
+  var BUBBLE_WHO = { bori: "보리", mango: "망고", cherry: "체리" };
+  var bubbleSig = "";
+
+  function bubbleTimeOf(l){
+    var v = l && (l.completedAt || l.updatedAt || l.finishedAt || l.startedAt);
+    var d = v ? new Date(v) : null;
+    return (d && !isNaN(d.getTime())) ? d.getTime() : null;
+  }
+
+  function bubbleStateOf(id, now){
+    var staff = staffOf().filter(function(s){ return s.id === id; })[0];
+    if (!staff) return null;
+    var nowMs = now.getTime();
+
+    /* 1) liveTasks: 지금 작업 중이 가장 먼저, 그다음 최근 완료 */
+    var work = null, done = null;
+    liveOf().forEach(function(l){
+      if ((l.assignee || "bori") !== id) return;
+      if (l.status === "working" && !work) work = l;
+      if (l.status === "done"){
+        var t = bubbleTimeOf(l);
+        if (t != null && nowMs - t <= BUBBLE_WINDOW_MS && (!done || t > done.t)) done = { l: l, t: t };
+      }
+    });
+    if (work) return { kind: "work", label: "작업중...", title: work.title || "" };
+    if (done) return { kind: "done", label: "완료!", title: done.l.title || "" };
+
+    /* 2) 비서 상태 문구 (liveTasks가 비어 있는 평소 상태) */
+    var stTxt = String(staff.status || "") + " " + String(staff.currentTask || "");
+    if (/작업\s*중|진행\s*중|처리\s*중/.test(stTxt)) return { kind: "work", label: "작업중...", title: "" };
+
+    /* 3) 담당자별 최근 완료 이력 (completed에 assignee가 있을 때) */
+    var latest = null;
+    completedOf().forEach(function(c){
+      if (!c || c.assignee !== id) return;
+      var t = bubbleTimeOf(c);
+      if (t != null && nowMs - t <= BUBBLE_WINDOW_MS && (!latest || t > latest.t)) latest = { c: c, t: t };
+    });
+    if (latest) return { kind: "done", label: "완료!", title: latest.c.title || "" };
+
+    var lastDone = staff.lastDoneAt ? new Date(staff.lastDoneAt) : null;
+    if (lastDone && !isNaN(lastDone.getTime()) && nowMs - lastDone.getTime() <= BUBBLE_WINDOW_MS && /완료/.test(stTxt)){
+      return { kind: "done", label: "완료!", title: "" };
+    }
+    return null;   /* 대기 중이면 말풍선 없음 */
+  }
+
+  function renderBubbles(force){
+    var map = $("#map");
+    if (!map) return;
+    var now = new Date();
+    var staff = staffOf();
+    var rooms = roomsOf();
+    var sig = staff.map(function(s){ return s.id + ":" + (BUBBLE_WHO[s.id] ? (bubbleStateOf(s.id, now) || {}).kind || "-" : "x"); }).join("|");
+    sig += "|" + rooms.map(function(r){ return r.id + r.x + r.y; }).join(",");
+    if (!force && sig === bubbleSig) return;
+    bubbleSig = sig;
+
+    $$(".bubble", map).forEach(function(b){ b.parentNode.removeChild(b); });
+    var html = "";
+    staff.forEach(function(s){
+      if (!BUBBLE_WHO[s.id]) return;
+      var st = bubbleStateOf(s.id, now);
+      if (!st) return;
+      var room = rooms.filter(function(r){ return r.id === s.room; })[0];
+      if (!room) return;
+      var x = Number(room.x), y = Number(room.y);
+      if (!isFinite(x) || !isFinite(y)) return;
+      html += '<span class="bubble ' + st.kind + '" data-who="' + esc(s.id) + '" style="--x:' + x + '%;--y:' + y + '%" ' +
+        'aria-label="' + esc(BUBBLE_WHO[s.id] + " " + st.label + (st.title ? " " + st.title : "")) + '">' +
+        '<span class="em" aria-hidden="true">' + (st.kind === "work" ? "💬" : "✅") + '</span>' +
+        '<span class="bt">' + esc(st.label) + '</span></span>';
+    });
+    if (html) map.insertAdjacentHTML("beforeend", html);
   }
 
   /* ---------- render: staff ---------- */
@@ -1377,6 +1504,9 @@
 
   function tick(){
     var now = new Date();
+
+    /* 말풍선 시간 만료(완료 후 8분) 반영 */
+    if (DATA) renderBubbles(false);
 
     /* 상단 실시간 시계 */
     setText($c.clockTime, hhmmss(now));
