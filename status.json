@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T17:31:00+09:00",
+  "updatedAt": "2026-11-27T22:41:30+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 #1~4 처리 완료",
+      "status": "작업 중",
+      "currentTask": "미국 증시·환율 브리핑 총괄",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 #4 처리 완료",
+      "status": "작업 중",
+      "currentTask": "원/달러 환율·금값 시세 조사 중",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 #5 처리 완료",
+      "status": "작업 중",
+      "currentTask": "나스닥·애플·엔비디아 주가 조사 중",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -332,5 +332,27 @@
       "updatedAt": "2026-11-27T15:38:00+09:00"
     }
   },
-  "liveTasks": []
+  "liveTasks": [
+    {
+      "id": "brief-2241-bori",
+      "assignee": "bori",
+      "title": "미국 증시·환율·금값 브리핑 총괄",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:41:30+09:00"
+    },
+    {
+      "id": "brief-2241-mango",
+      "assignee": "mango",
+      "title": "원/달러 환율·금값 시세 조사",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:41:30+09:00"
+    },
+    {
+      "id": "brief-2241-cherry",
+      "assignee": "cherry",
+      "title": "나스닥·애플·엔비디아 주가 조사",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:41:30+09:00"
+    }
+  ]
 }
