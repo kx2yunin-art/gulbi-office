@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T22:42:30+09:00",
+  "updatedAt": "2026-11-27T22:44:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "완료",
-      "currentTask": "미국 증시·환율·금값 브리핑 완료",
+      "status": "작업 중",
+      "currentTask": "주말 날씨·점심 추천 총괄",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "완료",
-      "currentTask": "원/달러 환율·금값 조사 완료 (1,337.9원 · $3,645/oz)",
+      "status": "작업 중",
+      "currentTask": "내일 사천·진주 날씨 확인 중",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "완료",
-      "currentTask": "나스닥·애플·엔비디아 조사 완료",
+      "status": "작업 중",
+      "currentTask": "주말 점심 메뉴 추천 조사 중",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -340,25 +340,25 @@
   },
   "liveTasks": [
     {
-      "id": "brief-2241-bori",
+      "id": "weekend-2244-bori",
       "assignee": "bori",
-      "title": "미국 증시·환율·금값 브리핑 총괄",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:42:30+09:00"
+      "title": "주말 날씨·점심 추천 총괄",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:44:00+09:00"
     },
     {
-      "id": "brief-2241-mango",
+      "id": "weekend-2244-mango",
       "assignee": "mango",
-      "title": "원/달러 환율·금값 시세 조사",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:42:05+09:00"
+      "title": "내일 사천·진주 날씨 확인",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:44:00+09:00"
     },
     {
-      "id": "brief-2241-cherry",
+      "id": "weekend-2244-cherry",
       "assignee": "cherry",
-      "title": "나스닥·애플·엔비디아 주가 조사",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:42:30+09:00"
+      "title": "주말 점심 메뉴 추천 조사",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:44:00+09:00"
     }
   ]
 }
