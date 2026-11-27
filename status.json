@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T17:30:00+09:00",
+  "updatedAt": "2026-11-27T17:31:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "비공개 지시 작업 중",
-      "currentTask": "비공개 지시 #5 조사 중",
+      "status": "상시 대기",
+      "currentTask": "비공개 지시 #5 처리 완료",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -290,6 +290,12 @@
   ],
   "completed": [
     {
+      "id": "priv-5",
+      "emoji": "🔒",
+      "title": "비공개 지시 #5 처리 완료",
+      "summary": "11/27(금) 17:31 완료 · 비공개 지시함에서 확인"
+    },
+    {
       "id": "priv-1-4",
       "emoji": "🔒",
       "title": "비공개 지시 #1~4 처리 완료",
@@ -326,13 +332,5 @@
       "updatedAt": "2026-11-27T15:38:00+09:00"
     }
   },
-  "liveTasks": [
-    {
-      "id": "priv-cherry-5",
-      "emoji": "🍒",
-      "title": "비공개 지시 #5 처리 중",
-      "owner": "체리",
-      "status": "진행 중"
-    }
-  ]
+  "liveTasks": []
 }
