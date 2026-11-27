@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T22:45:30+09:00",
+  "updatedAt": "2026-11-27T22:49:30+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "완료",
-      "currentTask": "주말 날씨·점심 추천 완료",
+      "status": "작업 중",
+      "currentTask": "11월 말 마감 혜택·일정 총괄",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "완료",
-      "currentTask": "내일 사천·진주 날씨 확인 완료",
+      "status": "작업 중",
+      "currentTask": "11/30 소멸 포인트 정리 중",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "완료",
-      "currentTask": "주말 점심 메뉴 추천 완료",
+      "status": "작업 중",
+      "currentTask": "수노 할인·로또 일정 확인 중",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -346,25 +346,25 @@
   },
   "liveTasks": [
     {
-      "id": "weekend-2244-bori",
+      "id": "novend-2249-bori",
       "assignee": "bori",
-      "title": "주말 날씨·점심 추천 총괄",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:45:30+09:00"
+      "title": "11월 말 마감 혜택·일정 총괄",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:49:30+09:00"
     },
     {
-      "id": "weekend-2244-mango",
+      "id": "novend-2249-mango",
       "assignee": "mango",
-      "title": "내일 사천·진주 날씨 확인",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:45:30+09:00"
+      "title": "11/30 소멸 포인트 정리",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:49:30+09:00"
     },
     {
-      "id": "weekend-2244-cherry",
+      "id": "novend-2249-cherry",
       "assignee": "cherry",
-      "title": "주말 점심 메뉴 추천 조사",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:45:20+09:00"
+      "title": "수노 할인·로또 일정 확인",
+      "status": "working",
+      "updatedAt": "2026-11-27T22:49:30+09:00"
     }
   ]
 }
