@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T06:56:00+09:00",
+  "updatedAt": "2026-11-28T07:44:30+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -363,11 +363,11 @@
       "updatedAt": "2026-11-28T06:12:00+09:00"
     },
     {
-      "id": "novend-2249-mango",
+      "id": "priv-7-mango",
       "assignee": "mango",
-      "title": "11/30 소멸 포인트 정리",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:50:10+09:00"
+      "title": "비공개 지시 작업 중",
+      "status": "working",
+      "updatedAt": "2026-11-28T07:44:30+09:00"
     },
     {
       "id": "priv-6-cherry",
