@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T16:22:00+09:00",
+  "updatedAt": "2026-11-27T16:22:30+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "지시 #1 총괄 중",
-      "currentTask": "지시 #1 배분 · 수합 중",
+      "status": "상시 대기",
+      "currentTask": "지시 #1 취합·보고 완료",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "내일 날씨 조사 중",
-      "currentTask": "사천시 11/28 날씨 확인",
+      "status": "상시 대기",
+      "currentTask": "사천시 11/28 날씨(6~13°C) 완료",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "지시 #1 완료",
-      "currentTask": "삼성전자 179,100원(+4.55%) 보고 완료",
+      "status": "상시 대기",
+      "currentTask": "삼성전자 179,100원(+4.55%) 완료",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -290,6 +290,12 @@
   ],
   "completed": [
     {
+      "id": "issue-1",
+      "emoji": "📢",
+      "title": "지시 #1 · 삼성전자 주가(체리) & 사천 내일 날씨(망고)",
+      "summary": "11/27(금) 16:22 완료 · 삼성전자 179,100원(+4.55%), 내일 사천 6~13°C 오후 맑음"
+    },
+    {
       "id": "hanwha",
       "emoji": "📈",
       "title": "한화시스템 55,000원 돌파 알림",
@@ -308,27 +314,5 @@
       "updatedAt": "2026-11-27T15:38:00+09:00"
     }
   },
-  "liveTasks": [
-    {
-      "id": "issue-1-bori",
-      "emoji": "👑",
-      "title": "지시 #1 총괄 · 취합 중",
-      "owner": "보리",
-      "status": "진행 중"
-    },
-    {
-      "id": "issue-1-mango",
-      "emoji": "🥭",
-      "title": "내일(11/28) 사천시 날씨 확인",
-      "owner": "망고",
-      "status": "요청 전달"
-    },
-    {
-      "id": "issue-1-cherry",
-      "emoji": "🍒",
-      "title": "오늘(11/27) 삼성전자 주가 확인",
-      "owner": "체리",
-      "status": "완료"
-    }
-  ]
+  "liveTasks": []
 }
