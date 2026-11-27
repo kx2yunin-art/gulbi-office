@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T05:39:14+09:00",
+  "updatedAt": "2026-11-28T05:41:21+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -352,9 +352,9 @@
     {
       "id": "novend-2249-bori",
       "assignee": "bori",
-      "title": "11월 말 마감 혜택·일정 총괄",
+      "title": "보리 남은 용량 표시 제거 완료",
       "status": "done",
-      "updatedAt": "2026-11-27T22:50:10+09:00"
+      "updatedAt": "2026-11-28T05:41:21+09:00"
     },
     {
       "id": "novend-2249-mango",
