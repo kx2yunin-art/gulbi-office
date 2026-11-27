@@ -644,7 +644,8 @@
   };
   var MEMO_KEY = "gulbiOffice.memos.v1";
   var STATUS_URL = "./status.json";
-  var SYNC_MS = 10000;
+  var GH_RAW_API = "https://api.github.com/repos/kx2yunin-art/gulbi-office/contents/status.json";
+  var SYNC_MS = 3000;
 
   /* status.json에서 내려받는 실시간 상태 (화면에 하드코딩하지 않음) */
   var DATA = null;
@@ -1582,30 +1583,40 @@
     });
   }
 
-  /* ---------- status.json 읽기 (10초마다 · 캐시 금지) ---------- */
-  function loadStatus(){
-    fetch(STATUS_URL + "?t=" + Date.now(), { cache: "no-store" })
+  /* ---------- status.json 읽기 (3초마다 · 캐시 금지, 앱 전환 시 GitHub API 즉시 조회) ---------- */
+  function applyStatusJson(json){
+    if (!json || !json.tasks || !json.rooms || !json.staff) throw new Error("형식 오류");
+    DATA = json;
+    lastSync = new Date();
+    syncError = null;
+    var sig;
+    try{ sig = JSON.stringify([json.updatedAt, json.staff, json.rooms, json.tasks, json.completed, json.taskResults, json.liveTasks]); }
+    catch(e){ sig = String(Math.random()); }
+    if (sig !== signature){
+      signature = sig;
+      renderAll();
+    } else {
+      updateSyncLine();
+    }
+    tick();
+  }
+
+  function loadStatus(preferInstant){
+    var url = preferInstant ? (GH_RAW_API + "?t=" + Date.now()) : (STATUS_URL + "?t=" + Date.now());
+    var opts = preferInstant
+      ? { cache: "no-store", headers: { "Accept": "application/vnd.github.raw" } }
+      : { cache: "no-store" };
+    fetch(url, opts)
       .then(function(res){
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
-      .then(function(json){
-        if (!json || !json.tasks || !json.rooms || !json.staff) throw new Error("형식 오류");
-        DATA = json;
-        lastSync = new Date();
-        syncError = null;
-        var sig;
-        try{ sig = JSON.stringify([json.updatedAt, json.staff, json.rooms, json.tasks, json.completed, json.taskResults, json.liveTasks]); }
-        catch(e){ sig = String(Math.random()); }
-        if (sig !== signature){
-          signature = sig;
-          renderAll();
-        } else {
-          updateSyncLine();
-        }
-        tick();
-      })
+      .then(applyStatusJson)
       .catch(function(err){
+        if (preferInstant){
+          loadStatus(false);
+          return;
+        }
         syncError = err;
         if (!DATA) showLoadError();
         updateSyncLine();
@@ -1616,10 +1627,12 @@
   renderMemos();
   renderUsageBadge();   /* 새로고침 직후에도 보리 사용한도 배지가 바로 보이게 */
   tick();
-  loadStatus();
-  setInterval(loadStatus, SYNC_MS);
+  loadStatus(true);
+  setInterval(function(){ loadStatus(false); }, SYNC_MS);
   setInterval(tick, 1000);
-  document.addEventListener("visibilitychange", function(){ if (!document.hidden){ tick(); loadStatus(); } });
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden){ tick(); loadStatus(true); } });
+  window.addEventListener("focus", function(){ tick(); loadStatus(true); });
+  window.addEventListener("pageshow", function(){ tick(); loadStatus(true); });
   window.__gulbiTick = tick;
   window.__gulbiLoad = loadStatus;
 
