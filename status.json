@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T17:01:00+09:00",
+  "updatedAt": "2026-11-27T17:12:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 처리 완료",
+      "status": "비공개 지시 총괄 중",
+      "currentTask": "비공개 지시 배분 · 취합 중",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 처리 완료",
+      "status": "비공개 지시 작업 중",
+      "currentTask": "비공개 지시 #4 조사 중",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "비공개 지시 처리 완료",
+      "status": "비공개 지시 작업 중",
+      "currentTask": "비공개 지시 #2·3 조사 중",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -320,5 +320,27 @@
       "updatedAt": "2026-11-27T15:38:00+09:00"
     }
   },
-  "liveTasks": []
+  "liveTasks": [
+    {
+      "id": "priv-bori",
+      "emoji": "👑",
+      "title": "비공개 지시 총괄 · 취합 중",
+      "owner": "보리",
+      "status": "진행 중"
+    },
+    {
+      "id": "priv-mango",
+      "emoji": "🥭",
+      "title": "비공개 지시 #4 처리 중",
+      "owner": "망고",
+      "status": "진행 중"
+    },
+    {
+      "id": "priv-cherry",
+      "emoji": "🍒",
+      "title": "비공개 지시 #2·3 처리 중",
+      "owner": "체리",
+      "status": "진행 중"
+    }
+  ]
 }
