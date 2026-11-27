@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T06:54:30+09:00",
+  "updatedAt": "2026-11-28T06:56:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -288,6 +288,12 @@
   ],
   "completed": [
     {
+      "id": "priv-6",
+      "emoji": "🔒",
+      "title": "비공개 지시 #6 처리 완료",
+      "summary": "11/28(토) 06:56 완료 · 비공개 지시함에서 확인"
+    },
+    {
       "id": "novend-2249",
       "emoji": "🎁",
       "title": "11월 말 마감 혜택·일정 총정리 완료",
@@ -366,9 +372,9 @@
     {
       "id": "priv-6-cherry",
       "assignee": "cherry",
-      "title": "비공개 지시 작업 중",
-      "status": "working",
-      "updatedAt": "2026-11-28T06:54:30+09:00"
+      "title": "비공개 지시 처리 완료",
+      "status": "done",
+      "updatedAt": "2026-11-28T06:56:00+09:00"
     }
   ]
 }
