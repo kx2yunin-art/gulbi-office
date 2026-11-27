@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T05:29:40+09:00",
+  "updatedAt": "2026-11-28T05:39:14+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -17,8 +17,6 @@
       "status": "완료",
       "currentTask": "11월 말 마감 혜택·일정 총괄 완료",
       "room": "hq",
-      "usagePct": 11,
-      "usageUpdatedAt": "2026-11-28T05:29:40+09:00",
       "duties": [
         "아침 브리핑",
         "일정·메모",
