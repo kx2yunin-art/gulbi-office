@@ -612,7 +612,8 @@
     "🛍️ 수노 연간 할인 9만 9천 원 — 11/30(일)까지",
     "💧 12/01 수돗세감면 신청",
     "📦 12/03 쿠팡 반납",
-    "⚓ 12/13 해기사 갱신"
+    "⚓ 12/13 해기사 갱신",
+    "👟 11/26 걷기 3.15km · 35분 6초 (5.39km/h · 샤오미 워치 5 라이트)"
   ];
 
   var $ = function(sel, root){ return (root || document).querySelector(sel); };
@@ -1148,7 +1149,29 @@
       var raw = localStorage.getItem(MEMO_KEY);
       if (raw){
         var v = JSON.parse(raw);
-        if (Array.isArray(v)) return v;
+        if (Array.isArray(v)){
+          var seenKey = "gulbi_office_seen_defaults_v1";
+          var seen = {};
+          try{ seen = JSON.parse(localStorage.getItem(seenKey) || "{}") || {}; }catch(e){}
+          var changed = false;
+          DEFAULT_MEMOS.forEach(function(t, i){
+            var id = "d" + i;
+            if (i >= 5 && !seen[id]){
+              seen[id] = true;
+              if (!v.some(function(m){ return m.id === id; })){
+                v.unshift({ id: id, text: t, done: false });
+              }
+              changed = true;
+            }
+          });
+          if (changed){
+            try{
+              localStorage.setItem(seenKey, JSON.stringify(seen));
+              localStorage.setItem(MEMO_KEY, JSON.stringify(v));
+            }catch(e){}
+          }
+          return v;
+        }
       }
     }catch(e){}
     return DEFAULT_MEMOS.map(function(t, i){ return { id: "d" + i, text: t, done: false }; });
