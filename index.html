@@ -1003,7 +1003,7 @@
 
     $$(".usage-badge", map).forEach(function(b){ b.parentNode.removeChild(b); });
     map.insertAdjacentHTML("beforeend",
-      '<span class="usage-badge ' + lvl + '" style="--x:' + x + '%;--y:' + y + '%" aria-label="보리 남은 용량 ' + esc(txt) + '">' +
+      '<span class="usage-badge ' + lvl + '" style="--x:' + x + '%;--y:' + y + '%" aria-label="보리 잔여 용량 ' + esc(txt.replace("잔여 ", "")) + '">' +
       '<i class="dot"></i>' + esc(txt) + '</span>');
   }
 
