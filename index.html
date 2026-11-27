@@ -161,7 +161,7 @@
   .bubble.work:after{background:#fff0d4;border-color:#e6c386;}
   .bubble.done{color:#3f6b45;background:linear-gradient(180deg,#fcfff8,#edf7e6);border-color:#c6ddb9;}
   .bubble.done:after{background:#edf7e6;border-color:#c6ddb9;}
-  /* 자리: 보리는 사용한도 배지 위, 망고·체리는 자기 핀(머리) 바로 위 */
+  /* 자리: 보리는 잔여 용량 배지 위, 망고·체리는 자기 핀(머리) 바로 위 */
   .bubble[data-who="bori"]{top:calc(var(--y) - 46px);}
   .bubble[data-who="mango"],.bubble[data-who="cherry"]{top:calc(var(--y) - 20px);}
   body.motion .bubble{animation:bubbleFloat 3.6s ease-in-out infinite;}
@@ -184,33 +184,20 @@
   }
   @media (prefers-reduced-motion: reduce){ body.motion .bubble, body.motion .bubble .bt{animation:none !important} }
 
-  /* sheet: 오늘 사용한도 */
+  /* sheet: 남은 용량 */
   .usage-box{margin:2px 0 4px;background:#fdf7ec;border:1px solid #f0e0c6;border-radius:14px;padding:11px 12px 10px;}
   .usage-box .utop{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
   .usage-box .utop b{font-size:14.5px;font-weight:800;color:#4a3628;letter-spacing:-.02em;}
   .usage-box .utop span{font-size:11px;color:#8d7761;font-weight:700;}
-  .usage-box .ubar{height:7px;border-radius:999px;background:#efe2cd;margin:8px 0 10px;overflow:hidden;}
+  .usage-box .ubar{height:7px;border-radius:999px;background:#efe2cd;margin:9px 0 0;overflow:hidden;}
   .usage-box .ubar i{display:block;height:100%;border-radius:999px;background:#8aa87f;transition:width .25s ease;}
   .usage-box .ubar i.warn{background:#e2a33c;}
   .usage-box .ubar i.hot{background:#d94f22;}
-  .usage-box .uquick{display:flex;gap:5px;flex-wrap:wrap;}
-  .usage-box .upre{
-    flex:1 1 0;min-width:44px;font-family:inherit;font-size:11px;font-weight:800;color:#6a4a2c;
-    background:#fffdf8;border:1px solid #e4d0b2;border-radius:10px;padding:6px 0;cursor:pointer;
-  }
-  .usage-box .upre:active{transform:scale(.97);}
-  .usage-box .upre.on{background:linear-gradient(180deg,#b9824c,#8f5d33);border-color:#7d4f28;color:#fff;}
-  .usage-box .urow{display:flex;gap:6px;margin-top:7px;}
-  .usage-box .urow input{
-    flex:1;min-width:0;font-family:inherit;font-size:12.5px;color:#4a3628;background:#fffdf8;
-    border:1px solid #e4d0b2;border-radius:10px;padding:7px 9px;
-  }
-  .usage-box .urow input.bad{border-color:#d94f22;background:#fff3ee;}
-  .usage-box .urow .usave{
-    flex:0 0 auto;font-family:inherit;font-size:12px;font-weight:800;color:#fff;
-    background:linear-gradient(180deg,#8fae7f,#6f9060);border:1px solid #648455;border-radius:10px;padding:7px 14px;cursor:pointer;
-  }
-  .usage-box .uhint{margin:8px 0 0;font-size:10.5px;line-height:1.5;color:#9b8570;}
+  .usage-box .uhint{margin:9px 0 0;font-size:10.5px;line-height:1.5;color:#9b8570;}
+  .usage-box.warn{background:#fffaf0;border-color:#ecd7a9;}
+  .usage-box.warn .utop b{color:#8a5a12;}
+  .usage-box.hot{background:#fff6f1;border-color:#e8bda9;}
+  .usage-box.hot .utop b{color:#a6371a;}
   .uusage{margin-top:7px;font-size:11px;font-weight:800;color:#7d6552;background:#f7f1e6;border:1px dashed #e6d1b2;border-radius:10px;padding:5px 9px;display:inline-block;}
   .uusage.warn{color:#8a5a12;background:#fff6e2;border-color:#e8c579;}
   .uusage.hot{color:#a6371a;background:#ffece3;border-color:#dc8f6f;}
@@ -689,7 +676,7 @@
   function staffOf(){ return asList(DATA && DATA.staff); }
   function roomsOf(){ return asList(DATA && DATA.rooms); }
 
-  /* ---------- 오늘 사용한도 (보리) ---------- */
+  /* ---------- 남은 용량 (보리) ---------- */
   var USAGE_KEY = "gulbiOffice.usage.bori.v1";
   var USAGE_RESET_H = 4;   /* 피클 일일 한도는 매일 새벽 4시 초기화 */
   /* status.json을 아직 못 받았거나 못 받아도 배지는 항상 보이도록 쓰는 기본 자리(지휘실 ㅂ 앞) */
@@ -720,10 +707,9 @@
     }catch(e){ return null; }
   }
 
-  /* status.json 값과 이 기기에서 입력한 값 중 더 최근 것 */
+  /* status.json의 usagePct가 기준값. 못 받았을 때만 이 기기에 남은 마지막 값을 쓴다 */
   function usageInfo(){
     var now = new Date();
-    var local = loadUsageLocal();
     var b = (DATA && DATA.staff && DATA.staff.bori) ? DATA.staff.bori : null;
     var remote = null;
     if (b && b.usagePct != null && b.usagePct !== "" && isFinite(Number(b.usagePct))){
@@ -731,49 +717,41 @@
       if (ra && isNaN(ra.getTime())) ra = null;
       remote = { pct: Number(b.usagePct), at: ra };
     }
-    var pick = null;
-    if (local && remote){
-      var la = local.at ? local.at.getTime() : 0;
-      var ra = remote.at ? remote.at.getTime() : 0;
-      /* status.json 쪽이 같거나 더 최신이면 status.json 값을 쓴다 */
-      pick = (la > ra) ? local : remote;
-      if (pick === remote && remote.at){
-        /* 더 최신 status.json 값을 이 기기에도 남겨, 다음 로드에서 옛 값이 되살아나지 않게 한다 (값이 다를 때만) */
-        var cur = loadUsageLocal();
-        if (!cur || cur.pct !== remote.pct || !cur.at || cur.at.getTime() !== remote.at.getTime()){
-          try{ localStorage.setItem(USAGE_KEY, JSON.stringify({ pct: remote.pct, at: remote.at.toISOString() })); }catch(e){}
-        }
-      }
-    } else pick = local || remote;
+    var pick = remote || loadUsageLocal();
     if (!pick) return { pct: null, at: null, resetting: false };
+    if (remote){
+      /* 받은 값을 이 기기에도 남겨, 다음에 status.json을 못 받아도 같은 숫자를 보여 준다 */
+      var cur = loadUsageLocal();
+      var curAt = (cur && cur.at) ? cur.at.getTime() : 0;
+      var remAt = remote.at ? remote.at.getTime() : 0;
+      if (!cur || cur.pct !== remote.pct || curAt !== remAt){
+        try{ localStorage.setItem(USAGE_KEY, JSON.stringify({ pct: remote.pct, at: remote.at ? remote.at.toISOString() : null })); }catch(e){}
+      }
+    }
     if (!pick.at) return { pct: Math.max(0, Math.min(100, pick.pct)), at: null, resetting: false };
     var resetAt = lastUsageReset(now);
     if (pick.at < resetAt) return { pct: 0, at: pick.at, resetting: true };
     return { pct: Math.max(0, Math.min(100, pick.pct)), at: pick.at, resetting: false };
   }
 
-  function usageLevel(p){
-    if (p == null) return "";
-    if (p >= 90) return "hot";
-    if (p >= 70) return "warn";
+  /* 남은 용량 = 100 - 사용률 */
+  function remainOf(pct){
+    if (pct == null || !isFinite(Number(pct))) return null;
+    return Math.max(0, Math.min(100, 100 - Math.round(Number(pct))));
+  }
+
+  /* 색상 강조는 남은 용량 기준: 30% 이상 기본(초록), 10~29% 주의(주황), 10% 미만 경고(빨강) */
+  function usageLevel(pct){
+    var left = remainOf(pct);
+    if (left == null) return "";
+    if (left < 10) return "hot";
+    if (left < 30) return "warn";
     return "";
   }
 
   function usageText(u){
-    if (u.pct == null) return "한도 --%";
-    var p = Math.round(u.pct);
-    return p + "% 사용 (잔여 " + (100 - p) + "%)";
-  }
-
-  function saveUsage(v){
-    var p = Math.round(Number(v));
-    if (!isFinite(p) || p < 0 || p > 100) return false;
-    try{ localStorage.setItem(USAGE_KEY, JSON.stringify({ pct: p, at: new Date().toISOString() })); }
-    catch(e){ return false; }
-    renderRooms();
-    renderStaff();
-    if (openKey) renderSheet();
-    return true;
+    var left = remainOf(u ? u.pct : null);
+    return (left == null) ? "잔여 --%" : "잔여 " + left + "%";
   }
   function tasksOf(){ return (DATA && Array.isArray(DATA.tasks)) ? DATA.tasks : []; }
   function completedOf(){ return (DATA && Array.isArray(DATA.completed)) ? DATA.completed : []; }
@@ -828,7 +806,7 @@
     var body = '<span class="st' + (r.active ? '' : ' idle') + '">' +
       (r.active ? '● ' : '○ ') + esc(r.status) + '</span>' +
       '<p class="desc">' + esc(r.desc) + '</p>';
-    if (r.id === bossRoomKey()) body += '<h4>📊 오늘 사용한도</h4>' + usageBlock();
+    if (r.id === bossRoomKey()) body += '<h4>🔋 남은 용량</h4>' + usageBlock();
     body += '<h4>이 자리에서 하는 일</h4><ul class="selist">' +
       items.map(function(it){
         return '<li><span class="t">' + esc(it.t) + '</span><span class="s">' + esc(it.s) + '</span></li>';
@@ -837,25 +815,19 @@
     $("#sheetBody").innerHTML = body;
   }
 
-  /* 방 시트 안 사용한도 입력 UI */
+  /* 방 시트 안 남은 용량 표시 (status.json 값 기준 · 수동 조정 없음) */
   function usageBlock(){
     var u = usageInfo();
     var p = (u.pct == null) ? null : Math.round(u.pct);
     var shown = (p == null) ? "--" : String(p);
-    var left = (p == null) ? "--" : String(100 - p);
+    var left = remainOf(p);
+    var leftTxt = (left == null) ? "--" : String(left);
     var lvl = usageLevel(p);
-    var presets = [0, 25, 50, 75, 95, 100].map(function(v){
-      return '<button type="button" class="upre' + (p === v ? ' on' : '') + '" data-usage="' + v + '" aria-pressed="' + (p === v ? 'true' : 'false') + '">' + v + '%</button>';
-    }).join("");
-    var stamp = "";
-    if (u.at && !isNaN(u.at.getTime())) stamp = " · 마지막 입력 " + mdhm(u.at);
-    return '<div class="usage-box">' +
-      '<div class="utop"><b>' + shown + '% 사용</b><span>잔여 ' + left + '%</span></div>' +
-      '<div class="ubar"><i class="' + lvl + '" style="width:' + (p == null ? 0 : p) + '%"></i></div>' +
-      '<div class="uquick">' + presets + '</div>' +
-      '<div class="urow"><input type="number" id="usageInput" min="0" max="100" step="1" inputmode="numeric" placeholder="0~100" value="' + (p == null ? "" : p) + '">' +
-      '<button type="button" class="usave" id="usageSave">저장</button></div>' +
-      '<p class="uhint">피클 일일 사용한도는 <b>매일 새벽 4시</b>에 초기화돼요. 숫자를 넣고 저장하거나 위 버튼을 누르면 바로 반영되고, 이 기기에만 저장됩니다' + esc(stamp) + '.</p>' +
+    var stamp = (u.at && !isNaN(u.at.getTime())) ? mdhm(u.at) : "기록 없음";
+    return '<div class="usage-box' + (lvl ? ' ' + lvl : '') + '">' +
+      '<div class="utop"><b>남은 용량 ' + leftTxt + '%</b><span>사용 ' + shown + '%</span></div>' +
+      '<div class="ubar"><i class="' + lvl + '" style="width:' + (left == null ? 0 : left) + '%"></i></div>' +
+      '<p class="uhint">피클 일일 한도는 <b>매일 새벽 4시</b>에 초기화돼요(사용 0% → 잔여 100%). 사용률은 status.json의 <b>usagePct</b>를 3초마다 확인해 <b>잔여 = 100 − 사용률</b>로 보여 드려요 · 마지막 갱신 ' + esc(stamp) + '.</p>' +
       '</div>';
   }
 
@@ -889,32 +861,6 @@
   backdrop.addEventListener("click", closeSheet);
   $("#sheetClose").addEventListener("click", closeSheet);
 
-  /* 사용한도 저장 (구간 버튼 · 직접 입력) */
-  var sheetBodyEl = $("#sheetBody");
-  if (sheetBodyEl){
-    sheetBodyEl.addEventListener("click", function(e){
-      var el = e.target.closest ? e.target.closest("[data-usage], #usageSave") : null;
-      if (!el) return;
-      var ok;
-      if (el.id === "usageSave"){
-        var inp = $("#usageInput");
-        var v = inp ? inp.value : "";
-        if (String(v).trim() === "" || !isFinite(Number(v)) || Number(v) < 0 || Number(v) > 100){
-          if (inp){ inp.classList.add("bad"); inp.focus(); }
-          return;
-        }
-        ok = saveUsage(v);
-        if (!ok && inp) inp.classList.add("bad");
-      } else {
-        ok = saveUsage(el.getAttribute("data-usage"));
-      }
-      var live = $("#sheetBody .uhint");
-      if (ok && live) live.innerHTML = '저장했어요 · 보리 핀 위 배지에 바로 반영됩니다. 피클 일일 한도는 <b>매일 새벽 4시</b>에 초기화돼요.';
-    });
-    sheetBodyEl.addEventListener("input", function(e){
-      if (e.target && e.target.id === "usageInput") e.target.classList.remove("bad");
-    });
-  }
   document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeSheet(); });
 
   /* ---------- time helpers ---------- */
@@ -1025,7 +971,7 @@
       }
       $$(".pin", map).forEach(function(p){ p.classList.toggle("sel", p.getAttribute("data-room") === openKey); });
 
-      /* 보리 핀 위 사용한도 배지 (0%여도 항상 표시) */
+      /* 보리 핀 위 잔여 용량 배지 (잔여 100%여도 항상 표시) */
       renderUsageBadge();
       /* 보리·망고·체리 머리 위 말풍선 */
       renderBubbles(true);
@@ -1035,12 +981,12 @@
     if (chip) chip.textContent = String(rooms.length);
   }
 
-  /* ---------- render: 보리 사용한도 배지 ---------- */
+  /* ---------- render: 보리 남은 용량 배지 ---------- */
   /* 페이지 로드·새로고침 즉시, 0%일 때도, status.json을 못 받아도 항상 배지를 그린다 */
+  var lastBadgeSig = "";
   function renderUsageBadge(){
     var map = $("#map");
     if (!map) return;
-    $$(".usage-badge", map).forEach(function(b){ b.parentNode.removeChild(b); });
 
     var hqKey = bossRoomKey();
     var rooms = roomsOf();
@@ -1049,9 +995,16 @@
     var y = (hqRoom && isFinite(Number(hqRoom.y))) ? Number(hqRoom.y) : BOSS_FALLBACK_POS.y;
 
     var u = usageInfo();
+    var lvl = usageLevel(u.pct);
+    var txt = usageText(u);
+    var sig = hqKey + "|" + x + "|" + y + "|" + lvl + "|" + txt;
+    if (sig === lastBadgeSig && $(".usage-badge", map)) return;   /* 달라졌을 때만 다시 그린다 */
+    lastBadgeSig = sig;
+
+    $$(".usage-badge", map).forEach(function(b){ b.parentNode.removeChild(b); });
     map.insertAdjacentHTML("beforeend",
-      '<span class="usage-badge ' + usageLevel(u.pct) + '" style="--x:' + x + '%;--y:' + y + '%" aria-label="보리 오늘 사용한도 ' + esc(usageText(u)) + '">' +
-      '<i class="dot"></i>' + esc(usageText(u)) + '</span>');
+      '<span class="usage-badge ' + lvl + '" style="--x:' + x + '%;--y:' + y + '%" aria-label="보리 남은 용량 ' + esc(txt) + '">' +
+      '<i class="dot"></i>' + esc(txt) + '</span>');
   }
 
   /* ---------- render: 말풍선 (작업중 / 완료) ---------- */
@@ -1147,8 +1100,9 @@
               ? '<div class="cur">' + (room ? esc(room.name) + ' · ' : '') + '지금 ' + esc(s.currentTask) + '</div>'
               : '';
             var u = s.boss ? usageInfo() : null;
+            var uLeft = u ? remainOf(u.pct) : null;
             var usageLine = u
-              ? '<div class="uusage ' + usageLevel(u.pct) + '">📊 오늘 사용한도 ' + esc(usageText(u)) + '</div>'
+              ? '<div class="uusage ' + usageLevel(u.pct) + '">🔋 남은 용량 ' + (uLeft == null ? "--" : uLeft) + '%</div>'
               : '';
             return '<div class="staff"><div class="ava">' + esc(s.emoji) + '</div><div class="body">' +
               '<div class="top"><h3>' + esc(s.name) + '</h3><span class="role">' + esc(s.role) + '</span></div>' +
@@ -1581,6 +1535,9 @@
       var card = $('[data-task="' + id + '"]');
       if (card) card.classList.toggle("soon", !!r.next && (r.next - now) <= 3600000);
     });
+
+    /* 새벽 4시 초기화가 지나면 잔여 용량 배지도 바로 100%로 바뀌게 (값이 같으면 다시 그리지 않음) */
+    renderUsageBadge();
   }
 
   /* ---------- status.json 읽기 (3초마다 · 캐시 금지, 앱 전환 시 GitHub API 즉시 조회) ---------- */
@@ -1625,7 +1582,7 @@
 
   /* ---------- start ---------- */
   renderMemos();
-  renderUsageBadge();   /* 새로고침 직후에도 보리 사용한도 배지가 바로 보이게 */
+  renderUsageBadge();   /* 새로고침 직후에도 보리 잔여 용량 배지가 바로 보이게 */
   tick();
   loadStatus(true);
   setInterval(function(){ loadStatus(false); }, SYNC_MS);
