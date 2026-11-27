@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T16:42:00+09:00",
+  "updatedAt": "2026-11-27T16:52:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -15,7 +15,7 @@
       "boss": true,
       "active": true,
       "status": "상시 대기",
-      "currentTask": "지시 #1 취합·보고 완료",
+      "currentTask": "지시 #3 완료 · #2 답변 대기",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -289,6 +289,12 @@
     }
   ],
   "completed": [
+    {
+      "id": "issue-3",
+      "emoji": "🍎",
+      "title": "지시 #3 · 요즘 과일값 & 국가비상 비상용품 정리",
+      "summary": "11/27(금) 16:52 완료 · aT 소매 시세 및 행안부 72시간 생존배낭 목록 보고"
+    },
     {
       "id": "issue-1",
       "emoji": "📢",
