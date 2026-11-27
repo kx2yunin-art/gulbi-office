@@ -1543,6 +1543,14 @@
   /* ---------- status.json 읽기 (3초마다 · 캐시 금지, 앱 전환 시 GitHub API 즉시 조회) ---------- */
   function applyStatusJson(json){
     if (!json || !json.tasks || !json.rooms || !json.staff) throw new Error("형식 오류");
+    /* GitHub Pages가 잠시 묵은 status.json을 돌려줄 수 있다. 더 새로운 상태를 이미 갖고 있으면 묵은 사본은 버린다 */
+    var newAt = json.updatedAt ? new Date(json.updatedAt).getTime() : NaN;
+    var oldAt = (DATA && DATA.updatedAt) ? new Date(DATA.updatedAt).getTime() : NaN;
+    if (isFinite(newAt) && isFinite(oldAt) && newAt < oldAt){
+      lastSync = new Date();
+      updateSyncLine();
+      return;
+    }
     DATA = json;
     lastSync = new Date();
     syncError = null;
