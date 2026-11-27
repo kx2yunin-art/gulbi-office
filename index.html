@@ -675,8 +675,11 @@
       /* status.json 쪽이 같거나 더 최신이면 status.json 값을 쓴다 */
       pick = (la > ra) ? local : remote;
       if (pick === remote && remote.at){
-        /* 더 최신 status.json 값을 이 기기에도 남겨, 다음 로드에서 옛 값이 되살아나지 않게 한다 */
-        try{ localStorage.setItem(USAGE_KEY, JSON.stringify({ pct: remote.pct, at: remote.at.toISOString() })); }catch(e){}
+        /* 더 최신 status.json 값을 이 기기에도 남겨, 다음 로드에서 옛 값이 되살아나지 않게 한다 (값이 다를 때만) */
+        var cur = loadUsageLocal();
+        if (!cur || cur.pct !== remote.pct || !cur.at || cur.at.getTime() !== remote.at.getTime()){
+          try{ localStorage.setItem(USAGE_KEY, JSON.stringify({ pct: remote.pct, at: remote.at.toISOString() })); }catch(e){}
+        }
       }
     } else pick = local || remote;
     if (!pick) return { pct: null, at: null, resetting: false };
