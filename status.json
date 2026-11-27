@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T16:52:00+09:00",
+  "updatedAt": "2026-11-27T17:01:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -15,7 +15,7 @@
       "boss": true,
       "active": true,
       "status": "상시 대기",
-      "currentTask": "지시 #3 완료 · #2 답변 대기",
+      "currentTask": "비공개 지시 처리 완료",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -34,7 +34,7 @@
       "boss": false,
       "active": true,
       "status": "상시 대기",
-      "currentTask": "사천시 11/28 날씨(6~13°C) 완료",
+      "currentTask": "비공개 지시 처리 완료",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -51,7 +51,7 @@
       "boss": false,
       "active": true,
       "status": "상시 대기",
-      "currentTask": "삼성전자 179,100원(+4.55%) 완료",
+      "currentTask": "비공개 지시 처리 완료",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -291,15 +291,15 @@
   "completed": [
     {
       "id": "issue-3",
-      "emoji": "🍎",
-      "title": "지시 #3 · 요즘 과일값 & 국가비상 비상용품 정리",
-      "summary": "11/27(금) 16:52 완료 · aT 소매 시세 및 행안부 72시간 생존배낭 목록 보고"
+      "emoji": "🔒",
+      "title": "비공개 지시 처리 완료",
+      "summary": "11/27(금) 16:52 완료 · 비공개 지시함에서 확인"
     },
     {
       "id": "issue-1",
-      "emoji": "📢",
-      "title": "지시 #1 · 삼성전자 주가(체리) & 사천 내일 날씨(망고)",
-      "summary": "11/27(금) 16:22 완료 · 삼성전자 179,100원(+4.55%), 내일 사천 6~13°C 오후 맑음"
+      "emoji": "🔒",
+      "title": "비공개 지시 처리 완료",
+      "summary": "11/27(금) 16:22 완료 · 비공개 지시함에서 확인"
     },
     {
       "id": "hanwha",

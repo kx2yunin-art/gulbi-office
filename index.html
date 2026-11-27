@@ -319,6 +319,15 @@
   .sendmsg.show{display:block;}
   .sendmsg.err{color:#a5543c;}
   .gitlink{display:inline-block;margin:6px 2px 0;font-size:10.8px;font-weight:800;color:var(--wood-dark);}
+  .lockcard{text-align:center;}
+  .locknote{margin:2px 2px 11px;font-size:11.8px;line-height:1.65;color:var(--ink-soft);}
+  .locknote b{color:var(--wood-dark);}
+  .lockbtn{
+    display:block;text-decoration:none;text-align:center;padding:12px;border-radius:14px;
+    font-size:13px;font-weight:800;letter-spacing:-.01em;color:#fff;
+    background:linear-gradient(180deg,#8f5d33,#6f4525);box-shadow:0 5px 14px rgba(111,69,37,.26);
+  }
+  .lockbtn:active{transform:translateY(1px);}
   .issue{
     display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
     border-radius:16px;padding:11px 12px;margin-bottom:8px;box-shadow:var(--shadow);
@@ -518,7 +527,7 @@
       <div class="hero">
         <span class="hero-badge">📢 지시·메모</span>
         <h2>회장님, 시킬 일은 여기에</h2>
-        <p>지시는 GitHub 이슈로 접수되고, 개인 메모는 이 기기에만 저장돼요.</p>
+        <p>지시는 비공개 GitHub 이슈로 접수되고, 개인 메모는 이 기기에만 저장돼요.</p>
       </div>
 
       <div class="sec"><h2>📢 보리에게 지시하기</h2><span>GitHub 접수</span></div>
@@ -538,14 +547,16 @@
           <textarea id="orderDetail" rows="3" placeholder="언제까지, 무엇을, 참고할 점"></textarea>
         </label>
         <button type="button" class="sendbtn" id="orderSend">📢 지시 보내기</button>
-        <p class="fineprint">보내기 후 GitHub 화면에서 <b>Create</b> 버튼을 눌러야 접수돼요. 공개 공간이므로 전화번호·계좌·비밀번호 등 개인정보는 적지 마세요.</p>
+        <p class="fineprint">보내기 후 열리는 비공개 GitHub 화면에서 <b>Create</b> 버튼을 눌러야 접수돼요.</p>
         <div class="sendmsg" id="orderMsg" role="status" aria-live="polite"></div>
         <a class="gitlink" id="orderAgain" href="#" target="_blank" rel="noopener" hidden>GitHub 새 창 다시 열기 →</a>
       </div>
 
-      <div class="sec"><h2>📌 접수된 지시</h2><span id="issueMeta">불러오는 중…</span></div>
-      <div id="issueList"><div class="empty">지시 목록을 불러오는 중이에요.</div></div>
-      <button type="button" class="refreshbtn" id="issueRefresh">↻ 새로고침</button>
+      <div class="sec"><h2>🔒 비공개 지시함</h2><span>회장님과 보리만</span></div>
+      <div class="order-card lockcard">
+        <p class="locknote">지시는 비공개 저장소(<b>gulbi-commands</b>)에 저장되어 회장님과 보리만 볼 수 있어요.</p>
+        <a class="lockbtn" href="https://github.com/kx2yunin-art/gulbi-commands/issues" target="_blank" rel="noopener">🔒 비공개 지시함 열기 (GitHub) →</a>
+      </div>
 
       <div class="sec"><h2>📝 개인 메모</h2><span>이 기기에만</span></div>
       <div class="memo-add">
@@ -1221,12 +1232,9 @@
   });
 
   /* ---------- 지시 (GitHub Issues 연동) ---------- */
-  var ISSUE_REPO = "https://github.com/kx2yunin-art/gulbi-office";
-  var ISSUE_API = "https://api.github.com/repos/kx2yunin-art/gulbi-office/issues?state=all&per_page=10";
-  var ISSUE_OWNER = "kx2yunin-art";
-  var ISSUE_MS = 30000;
+  /* 지시는 비공개 저장소(gulbi-commands)로만 접수 — 공개 목록은 불러오지 않음 */
+  var ISSUE_REPO = "https://github.com/kx2yunin-art/gulbi-commands";
   var orderWho = "보리 실장";
-  var issueItems = null, issueAt = null, issueErr = "", issueEtag = "", issueHoldUntil = 0;
 
   $$(".whochip").forEach(function(chip){
     chip.addEventListener("click", function(){
@@ -1267,7 +1275,7 @@
       "- **접수 시각**: " + stamp + "\n" +
       "- **접수 경로**: 굴비 비서실 현황판 › 지시·메모 › 지시하기\n\n" +
       "### 세부 내용\n" + (detail || "(따로 적지 않음 — 제목대로 처리)") + "\n\n" +
-      "---\n_공개 저장소예요. 전화번호·계좌·비밀번호 같은 개인정보는 적지 마세요._\n";
+      "---\n_비공개 저장소예요. 회장님과 보리만 볼 수 있어요._\n";
     return ISSUE_REPO + "/issues/new?title=" + encodeURIComponent(head) + "&body=" + encodeURIComponent(body);
   }
 
@@ -1290,75 +1298,6 @@
     if (e.key === "Enter"){ e.preventDefault(); sendOrder(); }
   });
 
-  function issueTime(iso){
-    var d = new Date(iso);
-    if (isNaN(d.getTime())) return "";
-    if (sameDay(d, new Date())) return "오늘 " + hhmm(d);
-    return mdhm(d);
-  }
-
-  function renderIssues(){
-    var box = $("#issueList");
-    if (!box) return;
-    if (!issueItems){
-      box.innerHTML = issueErr
-        ? '<div class="empty">지시 목록을 불러오지 못했어요. 30초마다 다시 시도합니다.</div>'
-        : '<div class="empty">지시 목록을 불러오는 중이에요.</div>';
-    } else if (!issueItems.length){
-      box.innerHTML = '<div class="empty">아직 접수된 지시가 없어요.</div>';
-    } else {
-      box.innerHTML = issueItems.map(function(it){
-        var open = it.state === "open";
-        return '<a class="issue" href="' + esc(it.html_url) + '" target="_blank" rel="noopener">' +
-          '<div class="itop"><span class="ibadge' + (open ? '' : ' closed') + '">' + (open ? '접수됨' : '완료') + '</span>' +
-          '<span class="idate">' + esc(issueTime(it.created_at)) + '</span></div>' +
-          '<div class="ititle">' + esc(it.title) + '</div>' +
-          '<div class="ifoot">#' + esc(it.number) + ' · GitHub에서 보기 →</div></a>';
-      }).join("");
-    }
-    var meta = $("#issueMeta");
-    if (meta){
-      if (issueItems && issueAt) meta.textContent = issueItems.length + "건 · " + hhmmss(issueAt) + " 기준";
-      else if (issueItems) meta.textContent = issueItems.length + "건";
-      else meta.textContent = "불러오는 중…";
-    }
-  }
-
-  /* 공개 API: 회장님이 직접 올린 이슈만 (PR·봇 제외). ETag 조건부 요청으로 호출 한도 아김 */
-  function loadIssues(force){
-    if (!force && Date.now() < issueHoldUntil) return;
-    var headers = { "Accept": "application/vnd.github+json" };
-    if (issueEtag && !force) headers["If-None-Match"] = issueEtag;
-    fetch(ISSUE_API, { cache: "no-store", headers: headers })
-      .then(function(res){
-        if (res.status === 304){
-          issueAt = new Date(); issueErr = ""; renderIssues(); return null;
-        }
-        var remain = res.headers.get("X-RateLimit-Remaining");
-        if ((res.status === 403 || res.status === 429) && remain === "0"){
-          var reset = Number(res.headers.get("X-RateLimit-Reset")) * 1000;
-          issueHoldUntil = reset > Date.now() ? reset : Date.now() + 60000;
-          throw new Error("한도 초과");
-        }
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        var tag = res.headers.get("ETag");
-        if (tag) issueEtag = tag;
-        return res.json().then(function(list){
-          if (!Array.isArray(list)) throw new Error("형식 오류");
-          issueItems = list.filter(function(it){
-            return !it.pull_request && it.user && it.user.login === ISSUE_OWNER;
-          }).slice(0, 10);
-          issueAt = new Date(); issueErr = ""; issueHoldUntil = 0;
-          renderIssues();
-        });
-      })
-      .catch(function(err){
-        issueErr = String((err && err.message) || err);
-        renderIssues();
-      });
-  }
-
-  if ($("#issueRefresh")) $("#issueRefresh").addEventListener("click", function(){ loadIssues(true); });
 
   /* ---------- 동기화 표시 ---------- */
   function fmtUpdated(d){
@@ -1518,15 +1457,12 @@
 
   /* ---------- start ---------- */
   renderMemos();
-  renderIssues();
   renderUsageBadge();   /* 새로고침 직후에도 보리 사용한도 배지가 바로 보이게 */
   tick();
   loadStatus();
-  loadIssues();
   setInterval(loadStatus, SYNC_MS);
-  setInterval(loadIssues, ISSUE_MS);
   setInterval(tick, 1000);
-  document.addEventListener("visibilitychange", function(){ if (!document.hidden){ tick(); loadStatus(); loadIssues(); } });
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden){ tick(); loadStatus(); } });
   window.__gulbiTick = tick;
   window.__gulbiLoad = loadStatus;
 
