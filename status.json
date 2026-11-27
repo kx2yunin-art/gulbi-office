@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T06:12:00+09:00",
+  "updatedAt": "2026-11-28T06:54:30+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -364,11 +364,11 @@
       "updatedAt": "2026-11-27T22:50:10+09:00"
     },
     {
-      "id": "novend-2249-cherry",
+      "id": "priv-6-cherry",
       "assignee": "cherry",
-      "title": "수노 할인·로또 일정 확인",
-      "status": "done",
-      "updatedAt": "2026-11-27T22:50:00+09:00"
+      "title": "비공개 지시 작업 중",
+      "status": "working",
+      "updatedAt": "2026-11-28T06:54:30+09:00"
     }
   ]
 }
