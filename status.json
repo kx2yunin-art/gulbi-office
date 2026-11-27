@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T16:21:00+09:00",
+  "updatedAt": "2026-11-27T16:22:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "삼성전자 주가 조사 중",
-      "currentTask": "삼성전자 11/27 마감 확인",
+      "status": "지시 #1 완료",
+      "currentTask": "삼성전자 179,100원(+4.55%) 보고 완료",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -328,7 +328,7 @@
       "emoji": "🍒",
       "title": "오늘(11/27) 삼성전자 주가 확인",
       "owner": "체리",
-      "status": "요청 전달"
+      "status": "완료"
     }
   ]
 }
