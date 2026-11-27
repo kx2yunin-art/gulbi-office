@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-27T16:12:00+09:00",
+  "updatedAt": "2026-11-27T16:21:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -14,8 +14,8 @@
       "tag": "회장님 직속",
       "boss": true,
       "active": true,
-      "status": "상시 대기",
-      "currentTask": "지시 분석 및 분배",
+      "status": "지시 #1 총괄 중",
+      "currentTask": "지시 #1 배분 · 수합 중",
       "room": "hq",
       "usagePct": 0,
       "usageUpdatedAt": "2026-11-27T16:12:00+09:00",
@@ -33,8 +33,8 @@
       "tag": "쫄따구 1호",
       "boss": false,
       "active": true,
-      "status": "매일 09:30 출근",
-      "currentTask": "네이버페이 적립 확인 대기",
+      "status": "내일 날씨 조사 중",
+      "currentTask": "사천시 11/28 날씨 확인",
       "room": "desk1",
       "duties": [
         "네이버페이 적립",
@@ -50,8 +50,8 @@
       "tag": "쫄따구 2호",
       "boss": false,
       "active": true,
-      "status": "매일 10:00 출근",
-      "currentTask": "부이 초대코드 메일 감시",
+      "status": "삼성전자 주가 조사 중",
+      "currentTask": "삼성전자 11/27 마감 확인",
       "room": "desk2",
       "duties": [
         "부이 초대코드",
@@ -310,12 +310,25 @@
   },
   "liveTasks": [
     {
-      "id": "live-01",
-      "emoji": "🔗",
-      "title": "비서실 현황판 status.json 연동",
-      "assignee": "bori",
-      "status": "working",
-      "result": "index.html이 10초마다 status.json을 읽도록 교체"
+      "id": "issue-1-bori",
+      "emoji": "👑",
+      "title": "지시 #1 총괄 · 취합 중",
+      "owner": "보리",
+      "status": "진행 중"
+    },
+    {
+      "id": "issue-1-mango",
+      "emoji": "🥭",
+      "title": "내일(11/28) 사천시 날씨 확인",
+      "owner": "망고",
+      "status": "요청 전달"
+    },
+    {
+      "id": "issue-1-cherry",
+      "emoji": "🍒",
+      "title": "오늘(11/27) 삼성전자 주가 확인",
+      "owner": "체리",
+      "status": "요청 전달"
     }
   ]
 }
