@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-28T08:05:00+09:00",
+  "updatedAt": "2026-11-28T20:18:00+09:00",
   "office": {
     "title": "굴비 비서실",
     "ownerLabel": "굴비 회장님"
@@ -52,7 +52,6 @@
       "currentTask": "수노 할인·로또 일정 확인 완료",
       "room": "desk2",
       "duties": [
-        "부이 초대코드",
         "메타 뮤즈",
         "필리조선소 매각"
       ]
@@ -125,10 +124,6 @@
       "active": true,
       "desc": "메일함과 뉴스를 살피는 자리예요. 기다리는 소식이 들어오면 바로 알려드려요.",
       "items": [
-        {
-          "t": "부이 초대코드 메일 알림",
-          "s": "매일 10:00"
-        },
         {
           "t": "메타 뮤즈 한국 출시 알림",
           "s": "매일 10:00"
@@ -214,20 +209,6 @@
         "type": "daily",
         "h": 9,
         "m": 30
-      }
-    },
-    {
-      "id": "vooy",
-      "emoji": "🍀",
-      "title": "부이(Vooy) 초대코드 메일 알림",
-      "when": "매일 10:00",
-      "group": "매일 챙기는 일",
-      "where": "메일/정보",
-      "desc": "지메일·네이버메일에 초대코드 메일이 오면 바로 알려드려요.",
-      "schedule": {
-        "type": "daily",
-        "h": 10,
-        "m": 0
       }
     },
     {
@@ -361,6 +342,13 @@
     }
   },
   "liveTasks": [
+    {
+      "id": "notion-jijeongri-bori",
+      "assignee": "bori",
+      "title": "노션 정리함·함께한 일 페이지 정리 완료",
+      "status": "done",
+      "updatedAt": "2026-11-28T20:18:00+09:00"
+    },
     {
       "id": "notion-restore-bori",
       "assignee": "bori",
